@@ -5,13 +5,17 @@ import { isFulfilledAction, isPendingAction, isRejectedAction } from '../checker
 const initialState = {
     isLoading: false,
     errors: [],
+    last: 1,
+    page: 1,
     posts: [],
 }
 
 const mainReducer = createReducer(initialState, (builder) => {
     builder
         .addCase(actions.getPosts.fulfilled, (state, action) => {
-            state.posts = action.payload.posts.data
+            state.posts = action.payload.posts
+            state.last = action.payload.last
+            state.page = action.payload.page
         })
         .addCase(actions.clearAllErrors.fulfilled, (state, action) => {
             state.errors = action.payload

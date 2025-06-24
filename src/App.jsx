@@ -1,32 +1,27 @@
-import {useEffect, useState} from 'react'
+import {useEffect} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
 import {useDispatch, useSelector} from "react-redux";
-import {clearAllErrors, getPosts} from "./redux/actions/mainActions.js";
+import {getPosts} from "./redux/actions/mainActions.js";
 
 function App() {
-    const [count, setCount] = useState(0)
-    const [page, setPage] = useState(1)
     const dispatch = useDispatch()
+    const page = useSelector(({page}) => page)
     const posts = useSelector(({posts}) => posts)
 
     const nextPage = () => {
-        setPage(page + 1)
-        dispatch(getPosts(page))
+        dispatch(getPosts(1))
     }
 
     const prevPage = () => {
-        if (page > 1) {
-            setPage(page - 1)
-            dispatch(getPosts(page))
-        }
+        dispatch(getPosts(-1))
     }
 
     useEffect(() => {
-        dispatch(getPosts(1))
-    }, [])
+        dispatch(getPosts(0))
+    }, [dispatch])
 
     return (
 
@@ -41,6 +36,7 @@ function App() {
                 </div>
                 <h1>Vite + React</h1>
                 <div className="card">
+                    <div>{page}</div>
                     <table>
                         <thead>
                         <tr>
@@ -59,17 +55,10 @@ function App() {
                     })}
                     </tbody>
                     </table>
-                    <button onClick={() => setCount((count) => count + 1)}>
-                        count is {count}
-                    </button>
-                    <p>
-                        Edit <code>src/App.jsx</code> and save to test HMR
-                    </p>
                 </div>
                 <p className="read-the-docs">
                     Click on the Vite and React logos to learn more
                 </p>
-                <input type={"button"} onClick={() => dispatch(clearAllErrors())} value={"clear"}></input>
                 <input type={"button"} onClick={prevPage} value={"Previous"}></input>
                 <input type={"button"} onClick={nextPage} value={"Next"}></input>
             </>
